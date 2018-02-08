@@ -1,12 +1,12 @@
 {
   "name": "donejs-travis",
   "version": "0.0.1",
-  "description": "",
+  "description": "A Yeoman generator to setup Travis in your DoneJS application",
   "homepage": "",
   "author": {
-    "name": "",
-    "email": "",
-    "url": ""
+    "name": "Bitovi",
+    "email": "contact@bitovi.com",
+    "url": "http://bitovi.com/"
   },
   "main": "lib/",
   "scripts": {
@@ -19,7 +19,7 @@
     "release:major": "npm version major && npm publish"
   },
   "keywords": [
-    "",
+    "donejs",
     "donejs-generator"
   ],
   "license": "MIT",
