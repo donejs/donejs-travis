@@ -1,7 +1,9 @@
+var yaml = require('js-yaml');
 var makeBadge = require('./make-badge');
 var parseUrl = require('./parse-git-url');
 var Generator = require('yeoman-generator');
 var gitRemoteOriginUrl = require('git-remote-origin-url');
+var parseTravisTemplate = require('./parse-travis-template');
 
 module.exports = Generator.extend({
   constructor: function(args, opts) {
@@ -82,7 +84,7 @@ module.exports = Generator.extend({
 
   _writeTravisConfig: function writeTravisConfig() {
     this.log('Writing config file to ' + this.configPath);
-    this.fs.copyTpl(this.templatePath('travis.yml'), this.configPath);
+    this.fs.write(this.configPath, yaml.safeDump(parseTravisTemplate()));
   },
 
   _writeTravisBadge: function writeTravisBadge() {

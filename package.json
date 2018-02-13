@@ -25,6 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "git-remote-origin-url": "^2.0.0",
+    "js-yaml": "^3.10.0",
     "lodash": "^4.17.4",
     "yeoman-generator": "^1.1.1"
   },
