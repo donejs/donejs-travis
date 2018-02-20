@@ -26,6 +26,10 @@ describe('donejs-travis', function() {
     it('should add travis badge to readme', function() {
       assert.fileContent('README.md', /\!\[Build Status\]/);
     });
+
+    it('updates package.json repository property', function() {
+      assert.fileContent('package.json', /"repository": "owner\/place-my-order"/);
+    });
   });
 
   describe('no travis.yml, existing README.md but empty options', function() {
@@ -64,6 +68,30 @@ describe('donejs-travis', function() {
 
     it('skips the badge', function() {
       assert.noFile('README.md');
+    });
+  });
+
+  describe('no travis.yml, package.json has repository object', function() {
+    before(function(done) {
+      helpers
+        .run(path.join(__dirname, '..', 'default'))
+        .withPrompts({ owner: 'donejs', name: 'place-my-order' })
+        .inTmpDir(function(dir) {
+          fs.copyFileSync(
+            path.join(__dirname, 'pkg_fixture.json'),
+            path.join(dir, 'package.json')
+          );
+        })
+        .on('end', done);
+    });
+
+    it('should write config file', function() {
+      assert.fileContent('.travis.yml', /language: node_js/);
+    });
+
+    it('only updates package.json repository.url', function() {
+      assert.fileContent('package.json', /"type": "git"/);
+      assert.fileContent('package.json', /"url": "donejs\/place-my-order"/);
     });
   });
 

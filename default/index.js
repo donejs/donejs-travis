@@ -1,6 +1,7 @@
 var yaml = require('js-yaml');
 var makeBadge = require('./make-badge');
 var parseUrl = require('./parse-git-url');
+var isObject = require('lodash/isObject');
 var Generator = require('yeoman-generator');
 var gitRemoteOriginUrl = require('git-remote-origin-url');
 var parseTravisTemplate = require('./parse-travis-template');
@@ -11,6 +12,8 @@ module.exports = Generator.extend({
 
     this.configPath = this.destinationPath('.travis.yml');
     this.readmePath = this.destinationPath('README.md');
+    this.pkgPath = this.destinationPath('package.json');
+    this.pkg = this.fs.readJSON(this.pkgPath, {});
   },
 
   initializing: function initializing() {
@@ -39,7 +42,7 @@ module.exports = Generator.extend({
   },
 
   prompting: function prompting() {
-    if (this.abort || this.skipBadge) {
+    if (this.abort) {
       return;
     }
 
@@ -59,6 +62,7 @@ module.exports = Generator.extend({
 
   writing: function writing() {
     if (!this.abort) {
+      this._writePackageJson();
       this._writeTravisConfig();
       this._writeTravisBadge();
     }
@@ -80,6 +84,22 @@ module.exports = Generator.extend({
         default: parsed.name ? parsed.name : null
       }
     ]);
+  },
+
+  _writePackageJson: function writePackageJson() {
+    this.log('Updating "repository" property of ' + this.pkgPath);
+
+    if (this.props.owner && this.props.name) {
+      var repo = `${this.props.owner}/${this.props.name}`;
+
+      if (isObject(this.pkg.repository)) {
+        this.pkg.repository.url = repo;
+      } else {
+        this.pkg.repository = repo;
+      }
+
+      this.fs.writeJSON(this.pkgPath, this.pkg);
+    }
   },
 
   _writeTravisConfig: function writeTravisConfig() {
