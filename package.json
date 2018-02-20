@@ -1,6 +1,6 @@
 {
   "name": "donejs-travis",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "A Yeoman generator to setup Travis in your DoneJS application",
   "homepage": "",
   "author": {
